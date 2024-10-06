@@ -1,0 +1,14 @@
+services:
+  postgres:
+    image: 'postgres:17.0'
+    environment:
+      - 'POSTGRES_USER=postgres'
+      - 'POSTGRES_PASSWORD=postgres'
+    ports:
+      - '7900:5432'
+  app:
+    build: .
+    ports:
+      - '8080:8080'
+    depends_on:
+      - postgres
