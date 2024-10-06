@@ -13,11 +13,6 @@ plugins {
 group = "ee.asaarep"
 version = "0.0.1-SNAPSHOT"
 
-springBoot {
-  mainClass.set("ee.asaarep.sanctions.SanctionsApiApplication")
-}
-
-
 allprojects {
   apply(plugin = "java-library")
   apply(plugin = "io.freefair.lombok")
@@ -50,12 +45,18 @@ subprojects {
   }
 }
 
+springBoot {
+  mainClass.set("ee.asaarep.sanctions.SanctionsApiApplication")
+}
+
 dependencies {
   implementation(project(":app-main"))
   implementation(project(":app-domain"))
   implementation(project(":adapter:jpa"))
   implementation(project(":adapter:web"))
   implementation(project(":liquibase"))
+
+  compileOnly(Libs.spring_boot_starter_tomcat)
 }
 
 tasks.withType<Test> {

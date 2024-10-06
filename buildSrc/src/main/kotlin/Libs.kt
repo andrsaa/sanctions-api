@@ -11,35 +11,44 @@ import kotlin.String
  *
  * See https://github.com/Splitties/refreshVersions
  */
-public object Libs {
-  public const val de_fayard_buildsrclibs_gradle_plugin: String =
+object Libs {
+  const val de_fayard_buildsrclibs_gradle_plugin: String =
     "de.fayard.buildSrcLibs:de.fayard.buildSrcLibs.gradle.plugin:_"
 
-  public const val io_freefair_lombok_gradle_plugin: String =
+  const val io_freefair_lombok_gradle_plugin: String =
     "io.freefair.lombok:io.freefair.lombok.gradle.plugin:_"
 
-  public const val io_spring_dependency_management_gradle_plugin: String =
+  const val io_spring_dependency_management_gradle_plugin: String =
     "io.spring.dependency-management:io.spring.dependency-management.gradle.plugin:_"
 
-  public const val junit_platform_launcher: String = "org.junit.platform:junit-platform-launcher"
+  const val junit_platform_launcher: String = "org.junit.platform:junit-platform-launcher"
 
-  public const val liquibase_core: String = "org.liquibase:liquibase-core"
+  const val liquibase_core: String = "org.liquibase:liquibase-core"
 
-  public const val postgresql: String = "org.postgresql:postgresql"
+  const val picocli: String = "info.picocli:picocli:_"
 
-  public const val org_springframework_boot_gradle_plugin: String =
+  const val postgresql: String = "org.postgresql:postgresql"
+
+  const val org_springframework_boot_gradle_plugin: String =
     "org.springframework.boot:org.springframework.boot.gradle.plugin:_"
 
-  public const val spring_boot_starter_data_jpa: String =
+  const val spring_boot_starter_data_jpa: String =
     "org.springframework.boot:spring-boot-starter-data-jpa"
 
-  public const val spring_boot_starter_test: String =
+  const val spring_boot_starter_test: String =
     "org.springframework.boot:spring-boot-starter-test"
 
-  public const val spring_boot_starter_web: String =
+  const val spring_boot_starter_web: String =
     "org.springframework.boot:spring-boot-starter-web:_"
 
-  public const val spring_tx: String = "org.springframework:spring-tx:_"
+  const val spring_tx: String = "org.springframework:spring-tx:_"
 
-  public const val spring_boot_start_security: String = "org.springframework.boot:spring-boot-starter-security:_"
+  const val spring_boot_start_security: String = "org.springframework.boot:spring-boot-starter-security:_"
+
+  const val spring_boot_starter: String = "org.springframework.boot:spring-boot-starter:_"
+
+  const val spring_data_commons: String = "org.springframework.data:spring-data-commons:_"
+
+  const val spring_boot_starter_tomcat: String = "org.springframework.boot:spring-boot-starter-tomcat:_"
+
 }
