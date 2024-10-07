@@ -1,8 +1,8 @@
 package ee.asaarep.sanctions.usecase.sanctionedperson;
 
-import ee.asaarep.sanctions.domain.PagedResult;
-import ee.asaarep.sanctions.domain.SanctionedPerson;
-import ee.asaarep.sanctions.usecase.PagedRequest;
+import ee.asaarep.sanctions.domain.pageable.PagedResult;
+import ee.asaarep.sanctions.domain.sanctionedperson.SanctionedPerson;
+import ee.asaarep.sanctions.domain.pageable.PagedRequest;
 import ee.asaarep.sanctions.usecase.sanctionedperson.port.FindSanctionedPersonPort;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -32,8 +32,8 @@ public class FindSanctionedPersons {
 
     public static Request of(String name) {
       return Request.builder()
-          .fullName(name)
-          .build();
+        .fullName(name)
+        .build();
     }
   }
 }

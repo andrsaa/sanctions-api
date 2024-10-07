@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+  <changeSet id="create_table_noise_word_07102024" author="andreas.saarep">
+    <createTable tableName="noise_word" schemaName="sanctions" remarks="Noise word">
+      <column name="id" type="UUID">
+        <constraints primaryKey="true" primaryKeyName="noise_word_id" nullable="false"/>
+      </column>
+      <column name="value" type="varchar(20)" remarks="Value of noise word">
+        <constraints nullable="false"/>
+      </column>
+      <column name="created" type="timestamp(6) with timezone" remarks="Created timestamp">
+        <constraints nullable="false"/>
+      </column>
+      <column name="modified" type="timestamp(6) with timezone" remarks="Modified timestamp">
+        <constraints nullable="false"/>
+      </column>
+      <column name="creator" type="jsonb" defaultValue='{"system":true}' remarks="Creator">
+        <constraints nullable="false"/>
+      </column>
+      <column name="modifier" type="jsonb" defaultValue='{"system":true}' remarks="Modifier">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="add_common_noise_words_07102024" author="andreas.saarep">
+    <sql>
+      INSERT INTO sanctions.noise_word (id, value, created, modified) VALUES
+        (sanctions.uuid_generate_v4(), 'the', now(), now()),
+        (sanctions.uuid_generate_v4(), 'to', now(), now()),
+        (sanctions.uuid_generate_v4(), 'an', now(), now()),
+        (sanctions.uuid_generate_v4(), 'a', now(), now()),
+        (sanctions.uuid_generate_v4(), 'mrs', now(), now()),
+        (sanctions.uuid_generate_v4(), 'mr', now(), now()),
+        (sanctions.uuid_generate_v4(), 'and', now(), now()),
+    </sql>
+  </changeSet>
+</databaseChangeLog>

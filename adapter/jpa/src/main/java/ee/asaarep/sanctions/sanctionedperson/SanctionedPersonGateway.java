@@ -1,7 +1,7 @@
 package ee.asaarep.sanctions.sanctionedperson;
 
-import ee.asaarep.sanctions.domain.PagedResult;
-import ee.asaarep.sanctions.domain.SanctionedPerson;
+import ee.asaarep.sanctions.domain.pageable.PagedResult;
+import ee.asaarep.sanctions.domain.sanctionedperson.SanctionedPerson;
 import ee.asaarep.sanctions.usecase.sanctionedperson.*;
 import ee.asaarep.sanctions.usecase.sanctionedperson.port.DeleteSanctionedPersonPort;
 import ee.asaarep.sanctions.usecase.sanctionedperson.port.FindSanctionedPersonPort;
@@ -24,8 +24,13 @@ public class SanctionedPersonGateway implements FindSanctionedPersonPort, SaveSa
   @Override
   public PagedResult<SanctionedPerson> findSanctionedPersons(FindSanctionedPersons.Request request) {
     return PagedResultUtil.toPagedResult(
-        sanctionedPersonRepository.findAll(sanctionedPersonSpecification.of(request), toPageRequest(request)),
-        SanctionedPersonJpaEntity::toDomainEntity);
+      sanctionedPersonRepository.findAll(sanctionedPersonSpecification.of(request), toPageRequest(request)),
+      SanctionedPersonJpaEntity::toDomainEntity);
+  }
+
+  @Override
+  public boolean checkIfPersonIsSanctioned(CheckIfPersonIsSanctioned.Request request) {
+    return sanctionedPersonRepository.checkIfPersonIsSanctioned(request.fullName);
   }
 
   @Override
@@ -36,14 +41,14 @@ public class SanctionedPersonGateway implements FindSanctionedPersonPort, SaveSa
   @Override
   public void update(UpdateSanctionedPersons.Request request) {
     var existing = sanctionedPersonRepository.findAllById(request.sanctionedPersons().stream()
-        .map(SanctionedPerson::id)
-        .toList());
+      .map(SanctionedPerson::id)
+      .toList());
     var updateResources = request.sanctionedPersons().stream()
-        .collect(Collectors.toMap(SanctionedPerson::id, r -> r));
+      .collect(Collectors.toMap(SanctionedPerson::id, r -> r));
 
     sanctionedPersonRepository.saveAll(existing.stream()
-        .map(entity -> updateResources.containsKey(entity.id()) ? entity.update(updateResources.get(entity.id())) : entity)
-        .toList());
+      .map(entity -> updateResources.containsKey(entity.id()) ? entity.update(updateResources.get(entity.id())) : entity)
+      .toList());
   }
 
   @Override

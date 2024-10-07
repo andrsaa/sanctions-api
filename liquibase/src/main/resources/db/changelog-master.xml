@@ -7,4 +7,5 @@
 
   <include file="changelog/01-schema.xml" relativeToChangelogFile="true"/>
   <include file="changelog/05-sanctioned-person.xml" relativeToChangelogFile="true"/>
+  <include file="changelog/10-noise-words.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>

@@ -1,4 +1,4 @@
-package ee.asaarep.sanctions.domain;
+package ee.asaarep.sanctions.domain.auth;
 
 import lombok.Builder;
 import lombok.Getter;

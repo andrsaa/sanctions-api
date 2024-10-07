@@ -1,6 +1,6 @@
 package ee.asaarep.sanctions.sanctionedperson.resource;
 
-import ee.asaarep.sanctions.domain.SanctionedPerson;
+import ee.asaarep.sanctions.domain.sanctionedperson.SanctionedPerson;
 import lombok.Getter;
 
 import java.util.UUID;

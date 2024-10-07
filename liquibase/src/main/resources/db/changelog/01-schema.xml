@@ -24,4 +24,10 @@
       CREATE EXTENSION IF NOT EXISTS pg_trgm SCHEMA sanctions;
     </sql>
   </changeSet>
+
+  <changeSet id="create_extension_uuid_ossp_07102024" author="andreas.saarep">
+    <sql>
+      CREATE EXTENSION IF NOT EXISTS "uuid-ossp" SCHEMA sanctions;
+    </sql>
+  </changeSet>
 </databaseChangeLog>

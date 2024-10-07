@@ -1,4 +1,4 @@
-package ee.asaarep.sanctions.domain;
+package ee.asaarep.sanctions.domain.pageable;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

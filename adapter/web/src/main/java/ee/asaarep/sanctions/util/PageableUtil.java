@@ -1,8 +1,8 @@
 package ee.asaarep.sanctions.util;
 
-import ee.asaarep.sanctions.domain.PagedResult;
-import ee.asaarep.sanctions.domain.Sort;
-import ee.asaarep.sanctions.usecase.PagedRequest;
+import ee.asaarep.sanctions.domain.pageable.PagedResult;
+import ee.asaarep.sanctions.domain.pageable.Sort;
+import ee.asaarep.sanctions.domain.pageable.PagedRequest;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 import org.springframework.data.domain.Page;
@@ -27,15 +27,15 @@ public class PageableUtil {
 
   public static List<Sort> toSort(Pageable pageable) {
     return pageable.getSort().get()
-        .map(o -> Sort.of(Sort.Direction.valueOf(o.getDirection().name()), o.getProperty()))
-        .toList();
+      .map(o -> Sort.of(Sort.Direction.valueOf(o.getDirection().name()), o.getProperty()))
+      .toList();
   }
 
   public static <I, O> Page<O> present(@NonNull PagedResult<I> rows, Function<I, O> transformer) {
     return new PageImpl<>(
-        present(rows.content, transformer),
-        PageRequest.of(rows.page, rows.size),
-        rows.total
+      present(rows.content, transformer),
+      PageRequest.of(rows.page, rows.size),
+      rows.total
     );
   }
 

@@ -20,22 +20,22 @@ public class SecurityConfig {
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     http
-        .csrf(AbstractHttpConfigurer::disable)
-        .authorizeHttpRequests((requests) -> requests
-            .anyRequest().authenticated()
-        )
-        .httpBasic(withDefaults());
+      .csrf(AbstractHttpConfigurer::disable)
+      .authorizeHttpRequests((requests) -> requests
+        .anyRequest().authenticated()
+      )
+      .httpBasic(withDefaults());
     return http.build();
   }
 
   @Bean
   public UserDetailsService userDetailsService() {
     UserDetails user =
-        User.withDefaultPasswordEncoder()
-            .username("user")
-            .password("password")
-            .roles("USER")
-            .build();
+      User.withDefaultPasswordEncoder()
+        .username("user")
+        .password("password")
+        .roles("USER")
+        .build();
 
     return new InMemoryUserDetailsManager(user);
   }

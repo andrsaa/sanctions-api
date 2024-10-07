@@ -11,6 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Set;
 import java.util.UUID;
 
+import static lombok.AccessLevel.PRIVATE;
+
 @Component
 @RequiredArgsConstructor
 @Slf4j
@@ -24,14 +26,14 @@ public class DeleteSanctionedPersons {
   }
 
   @Getter
-  @Builder
+  @Builder(access = PRIVATE)
   public static class Request {
     private Set<UUID> sanctionedPersonsToDelete;
 
     public static Request of(Set<UUID> ids) {
       return Request.builder()
-          .sanctionedPersonsToDelete(ids)
-          .build();
+        .sanctionedPersonsToDelete(ids)
+        .build();
     }
   }
 }

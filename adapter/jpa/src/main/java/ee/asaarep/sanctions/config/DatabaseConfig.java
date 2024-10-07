@@ -12,7 +12,7 @@ import java.util.Optional;
 @Configuration
 @EnableJpaAuditing(auditorAwareRef = "authenticationInfoProvider", dateTimeProviderRef = "auditingDateTimeProvider")
 @EnableJpaRepositories(
-    basePackages = "ee.asaarep.sanctions"
+  basePackages = "ee.asaarep.sanctions"
 )
 public class DatabaseConfig {
 

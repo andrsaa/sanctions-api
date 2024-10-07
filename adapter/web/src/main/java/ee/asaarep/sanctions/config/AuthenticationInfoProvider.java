@@ -1,6 +1,6 @@
 package ee.asaarep.sanctions.config;
 
-import ee.asaarep.sanctions.domain.User;
+import ee.asaarep.sanctions.domain.auth.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.lang.NonNull;
@@ -29,8 +29,8 @@ class AuthenticationInfoProvider implements AuditorAware<User> {
       Object principal = authentication.getPrincipal();
       if (principal instanceof UserDetails) {
         return Optional.of(User.builder()
-            .personName(((UserDetails) principal).getUsername())
-            .build());
+          .personName(((UserDetails) principal).getUsername())
+          .build());
       }
     }
     return Optional.empty();

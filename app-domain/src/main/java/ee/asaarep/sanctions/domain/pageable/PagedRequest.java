@@ -1,6 +1,5 @@
-package ee.asaarep.sanctions.usecase;
+package ee.asaarep.sanctions.domain.pageable;
 
-import ee.asaarep.sanctions.domain.Sort;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

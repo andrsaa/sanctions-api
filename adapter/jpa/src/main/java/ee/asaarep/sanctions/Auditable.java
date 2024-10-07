@@ -1,6 +1,6 @@
 package ee.asaarep.sanctions;
 
-import ee.asaarep.sanctions.domain.User;
+import ee.asaarep.sanctions.domain.auth.User;
 import io.hypersistence.utils.hibernate.type.json.JsonBinaryType;
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
