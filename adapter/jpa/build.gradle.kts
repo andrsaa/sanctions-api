@@ -3,6 +3,7 @@ dependencies {
     implementation(Libs.liquibase_core)
     implementation(Libs.postgresql)
     implementation(Libs.hypersistence_utils_hibernate_62)
+    implementation(Libs.commons_lang3)
 
     implementation(project(":app-domain"))
 }

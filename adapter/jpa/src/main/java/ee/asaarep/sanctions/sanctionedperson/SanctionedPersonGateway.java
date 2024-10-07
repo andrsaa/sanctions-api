@@ -2,22 +2,52 @@ package ee.asaarep.sanctions.sanctionedperson;
 
 import ee.asaarep.sanctions.domain.PagedResult;
 import ee.asaarep.sanctions.domain.SanctionedPerson;
-import ee.asaarep.sanctions.usecase.sanctionedperson.FindSanctionedPersonPort;
-import ee.asaarep.sanctions.usecase.sanctionedperson.FindSanctionedPersons;
+import ee.asaarep.sanctions.usecase.sanctionedperson.*;
+import ee.asaarep.sanctions.usecase.sanctionedperson.port.DeleteSanctionedPersonPort;
+import ee.asaarep.sanctions.usecase.sanctionedperson.port.FindSanctionedPersonPort;
+import ee.asaarep.sanctions.usecase.sanctionedperson.port.SaveSanctionedPersonPort;
 import ee.asaarep.sanctions.util.PagedResultUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+
+
+import java.util.stream.Collectors;
 
 import static ee.asaarep.sanctions.util.SearchUtil.toPageRequest;
 
 @Component
 @RequiredArgsConstructor
-public class SanctionedPersonGateway implements FindSanctionedPersonPort {
+public class SanctionedPersonGateway implements FindSanctionedPersonPort, SaveSanctionedPersonPort, DeleteSanctionedPersonPort {
   private final SanctionedPersonRepository sanctionedPersonRepository;
+  private final SanctionedPersonSpecification sanctionedPersonSpecification = new SanctionedPersonSpecification();
 
   @Override
   public PagedResult<SanctionedPerson> findSanctionedPersons(FindSanctionedPersons.Request request) {
-    return PagedResultUtil.toPagedResult(sanctionedPersonRepository.findAllBy(toPageRequest(request)),
+    return PagedResultUtil.toPagedResult(
+        sanctionedPersonRepository.findAll(sanctionedPersonSpecification.of(request), toPageRequest(request)),
         SanctionedPersonJpaEntity::toDomainEntity);
+  }
+
+  @Override
+  public void save(SaveSanctionedPersons.Request request) {
+    sanctionedPersonRepository.saveAll(SanctionedPersonJpaEntity.fromDomainEntities(request.sanctionedPersons()));
+  }
+
+  @Override
+  public void update(UpdateSanctionedPersons.Request request) {
+    var existing = sanctionedPersonRepository.findAllById(request.sanctionedPersons().stream()
+        .map(SanctionedPerson::id)
+        .toList());
+    var updateResources = request.sanctionedPersons().stream()
+        .collect(Collectors.toMap(SanctionedPerson::id, r -> r));
+
+    sanctionedPersonRepository.saveAll(existing.stream()
+        .map(entity -> updateResources.containsKey(entity.id()) ? entity.update(updateResources.get(entity.id())) : entity)
+        .toList());
+  }
+
+  @Override
+  public void delete(DeleteSanctionedPersons.Request request) {
+    sanctionedPersonRepository.deleteAllById(request.getSanctionedPersonsToDelete());
   }
 }

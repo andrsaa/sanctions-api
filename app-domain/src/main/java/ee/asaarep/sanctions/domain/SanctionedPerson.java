@@ -11,5 +11,5 @@ import java.util.UUID;
 @Accessors(fluent = true)
 public class SanctionedPerson {
   private final UUID id;
-  private final String name;
+  private final String fullName;
 }

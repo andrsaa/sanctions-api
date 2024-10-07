@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import lombok.experimental.SuperBuilder;
 
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -24,13 +25,32 @@ public class SanctionedPersonJpaEntity extends Auditable {
   @Column(name = "id", nullable = false)
   private UUID id;
 
-  @Column(name = "name", nullable = false)
-  private String name;
+  @Column(name = "full_name", nullable = false)
+  private String fullName;
 
   public SanctionedPerson toDomainEntity() {
     return SanctionedPerson.builder()
         .id(id)
-        .name(name)
+        .fullName(fullName)
+        .build();
+  }
+
+  public static List<SanctionedPersonJpaEntity> fromDomainEntities(List<SanctionedPerson> sanctionedPersons) {
+    return sanctionedPersons.stream()
+        .map(SanctionedPersonJpaEntity::toEntity)
+        .toList();
+  }
+
+  public SanctionedPersonJpaEntity update(SanctionedPerson sanctionedPerson) {
+    return this.toBuilder()
+        .fullName(sanctionedPerson.fullName())
+        .build();
+  }
+
+  private static SanctionedPersonJpaEntity toEntity(SanctionedPerson sanctionedPerson) {
+    return SanctionedPersonJpaEntity.builder()
+        .id(sanctionedPerson.id())
+        .fullName(sanctionedPerson.fullName())
         .build();
   }
 }

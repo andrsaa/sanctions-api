@@ -9,7 +9,7 @@
       <column name="id" type="UUID">
         <constraints primaryKey="true" primaryKeyName="sanctioned_person_id" nullable="false"/>
       </column>
-      <column name="name" type="varchar(255)" remarks="Full name">
+      <column name="full_name" type="varchar(255)" remarks="Full name">
         <constraints nullable="false"/>
       </column>
       <column name="created" type="timestamp(6) with timezone"
