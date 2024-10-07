@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+  <changeSet id="create_table_sanctioned_person_07102024" author="andreas.saarep">
+    <createTable tableName="sanctioned_person" schemaName="sanctions" remarks="Sanctioned person">
+      <column name="id" type="UUID">
+        <constraints primaryKey="true" primaryKeyName="sanctioned_person_id" nullable="false"/>
+      </column>
+      <column name="name" type="varchar(255)" remarks="Full name">
+        <constraints nullable="false"/>
+      </column>
+      <column name="created" type="timestamp(6) with timezone"
+              remarks="Created timestamp">
+        <constraints nullable="false"/>
+      </column>
+      <column name="modified" type="timestamp(6) with timezone"
+              remarks="Modified timestamp">
+        <constraints nullable="false"/>
+      </column>
+      <column name="creator" type="jsonb" defaultValue='{"system":true}' remarks="Creator">
+        <constraints nullable="false"/>
+      </column>
+      <column name="modifier" type="jsonb" defaultValue='{"system":true}' remarks="Modifier">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+</databaseChangeLog>

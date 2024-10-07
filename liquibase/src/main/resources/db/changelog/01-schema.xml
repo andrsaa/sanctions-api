@@ -5,10 +5,23 @@
                    https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd"
                    logicalFilePath="01-schema.xml">
 
-    <changeSet id="schema_07102024" author="andreas.saarep">
-        <sql>
-            CREATE SCHEMA sanctions;
-            SET search_path = sanctions;
-        </sql>
-    </changeSet>
+  <changeSet id="schema_07102024" author="andreas.saarep">
+    <sql>
+      CREATE SCHEMA sanctions;
+      SET search_path = sanctions;
+    </sql>
+  </changeSet>
+
+  <changeSet id="set_datestyle_timezone_07102024" author="andreas.saarep">
+    <sql>
+      SET datestyle TO 'ISO, MDY';
+      SET TIMEZONE='Europe/Tallinn';
+    </sql>
+  </changeSet>
+
+  <changeSet id="create_extension_pg_trgm_07102024" author="andreas.saarep">
+    <sql>
+      CREATE EXTENSION IF NOT EXISTS pg_trgm SCHEMA sanctions;
+    </sql>
+  </changeSet>
 </databaseChangeLog>

@@ -1,4 +1,4 @@
-package ee.asaarep.sanctions;
+package ee.asaarep.sanctions.config;
 
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;

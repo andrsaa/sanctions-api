@@ -29,6 +29,8 @@ object Libs {
 
   const val postgresql: String = "org.postgresql:postgresql"
 
+  const val hypersistence_utils_hibernate_62: String = "io.hypersistence:hypersistence-utils-hibernate-62:_"
+
   const val org_springframework_boot_gradle_plugin: String =
     "org.springframework.boot:org.springframework.boot.gradle.plugin:_"
 
