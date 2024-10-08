@@ -20,7 +20,6 @@ public class FindSanctionedPersons {
 
   @Transactional
   public PagedResult<SanctionedPerson> execute(Request request) {
-    log.info("Getting sanctioned persons");
     return findSanctionedPersonPort.findSanctionedPersons(request);
   }
 

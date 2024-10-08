@@ -20,7 +20,7 @@ public class UpdateSanctionedPersons {
   private final SaveSanctionedPersonPort saveSanctionedPersonPort;
 
   public void execute(Request request) {
-    log.info("Updating sanctioned persons");
+    log.debug("Updating sanctioned persons");
     saveSanctionedPersonPort.update(request);
   }
 

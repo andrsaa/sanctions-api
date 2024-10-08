@@ -8,19 +8,27 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @RestController
 @RequiredArgsConstructor
 @Slf4j
 @RequestMapping("/sanctioned-person")
 public class SanctionedPersonController {
+  private static final String TEXT_CSV_TYPE = "text/csv";
+
   private final FindSanctionedPersons findSanctionedPersons;
   private final SaveSanctionedPersons saveSanctionedPersons;
   private final UpdateSanctionedPersons updateSanctionedPersons;
   private final DeleteSanctionedPersons deleteSanctionedPersons;
   private final CheckIfPersonIsSanctioned checkIfPersonIsSanctioned;
+  private final UploadSanctionedPersons uploadSanctionedPersons;
+  private final SanctionedPersonPresenter sanctionedPersonPresenter;
 
   @GetMapping("/get")
   public Page<SanctionedPersonResultRow> getSanctionedPersons(@Valid @RequestBody SanctionedPersonSearchParams params, Pageable pageable) {
@@ -29,8 +37,8 @@ public class SanctionedPersonController {
   }
 
   @PostMapping("/check")
-  public ResponseEntity<Boolean> checkSanctionedPerson(@Valid @RequestBody SanctionedPersonCheckIfSanctionedResource resource) {
-    return ResponseEntity.ok(checkIfPersonIsSanctioned.execute(resource.toRequest()));
+  public ResponseEntity<CheckIfSanctionedResponseResource> checkSanctionedPerson(@Valid @RequestBody CheckIfSanctionedRequestResource resource) {
+    return sanctionedPersonPresenter.present(checkIfPersonIsSanctioned.execute(resource.toRequest()));
   }
 
   @PostMapping("/add")
@@ -52,7 +60,15 @@ public class SanctionedPersonController {
   }
 
   @PostMapping("/upload")
-  public void uploadSanctionedPersons() {
-    log.info("Adding sanctioned person");
+  public ResponseEntity<Void> uploadSanctionedPersons(@RequestParam("file") MultipartFile file) throws IOException {
+    log.info("Uploading sanctioned persons from CSV file with size: {} kb", Math.round(file.getSize() / 1024.0));
+    if (file.isEmpty()) {
+      return ResponseEntity.badRequest().build();
+    }
+    if (!TEXT_CSV_TYPE.equals(file.getContentType())) {
+      return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE).build();
+    }
+    uploadSanctionedPersons.execute(UploadSanctionedPersons.Request.of(file.getInputStream()));
+    return ResponseEntity.ok().build();
   }
 }

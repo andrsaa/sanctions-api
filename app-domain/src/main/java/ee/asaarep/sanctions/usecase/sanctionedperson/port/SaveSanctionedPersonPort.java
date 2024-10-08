@@ -1,6 +1,5 @@
 package ee.asaarep.sanctions.usecase.sanctionedperson.port;
 
-
 import ee.asaarep.sanctions.usecase.sanctionedperson.SaveSanctionedPersons;
 import ee.asaarep.sanctions.usecase.sanctionedperson.UpdateSanctionedPersons;
 

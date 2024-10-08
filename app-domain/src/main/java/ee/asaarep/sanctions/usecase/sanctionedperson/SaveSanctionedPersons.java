@@ -22,7 +22,7 @@ public class SaveSanctionedPersons {
 
   @Transactional
   public void execute(Request request) {
-    log.info("Adding sanctioned persons");
+    log.debug("Saving sanctioned persons");
     saveSanctionedPersonPort.save(request);
   }
 

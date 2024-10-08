@@ -36,7 +36,7 @@
         (sanctions.uuid_generate_v4(), 'a', now(), now()),
         (sanctions.uuid_generate_v4(), 'mrs', now(), now()),
         (sanctions.uuid_generate_v4(), 'mr', now(), now()),
-        (sanctions.uuid_generate_v4(), 'and', now(), now()),
+        (sanctions.uuid_generate_v4(), 'and', now(), now())
     </sql>
   </changeSet>
 </databaseChangeLog>

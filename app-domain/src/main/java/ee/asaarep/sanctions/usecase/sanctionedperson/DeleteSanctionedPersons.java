@@ -21,7 +21,7 @@ public class DeleteSanctionedPersons {
 
   @Transactional
   public void execute(Request request) {
-    log.info("Deleting sanctioned persons");
+    log.debug("Deleting sanctioned persons with ids: {}", request.sanctionedPersonsToDelete);
     deleteSanctionedPersonPort.delete(request);
   }
 

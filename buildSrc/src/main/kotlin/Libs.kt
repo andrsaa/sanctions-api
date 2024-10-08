@@ -56,4 +56,6 @@ object Libs {
   const val spring_boot_starter_validation: String = "org.springframework.boot:spring-boot-starter-validation:_"
 
   const val commons_lang3: String = "org.apache.commons:commons-lang3:_"
+
+  const val commons_csv: String = "org.apache.commons:commons-csv:_"
 }
