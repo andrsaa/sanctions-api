@@ -1,6 +1,6 @@
-package ee.asaarep.sanctions.usecase.sanctionedperson;
+package ee.asaarep.sanctions.usecase.noiseword;
 
-import ee.asaarep.sanctions.usecase.sanctionedperson.port.DeleteSanctionedPersonPort;
+import ee.asaarep.sanctions.usecase.noiseword.port.DeleteNoiseWordsPort;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -17,24 +17,24 @@ import static lombok.AccessLevel.PRIVATE;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class DeleteSanctionedPersons {
-  private final DeleteSanctionedPersonPort deleteSanctionedPersonPort;
+public class DeleteNoiseWords {
+  private final DeleteNoiseWordsPort deleteNoiseWordsPort;
 
   @Transactional
   public void execute(Request request) {
-    log.debug("Deleting sanctioned persons with ids: {}", request.sanctionedPersonsToDelete);
-    deleteSanctionedPersonPort.delete(request);
+    log.debug("Deleting noise words with ids: {}", request.noiseWordsToDelete);
+    deleteNoiseWordsPort.delete(request);
   }
 
   @Getter
   @Builder(access = PRIVATE)
   @Accessors(fluent = true)
   public static class Request {
-    private Set<UUID> sanctionedPersonsToDelete;
+    private Set<UUID> noiseWordsToDelete;
 
     public static Request of(Set<UUID> ids) {
       return Request.builder()
-        .sanctionedPersonsToDelete(ids)
+        .noiseWordsToDelete(ids)
         .build();
     }
   }

@@ -16,6 +16,7 @@ public class CheckIfSanctionedResponseResource {
   private boolean isSanctioned;
   private String fullName;
   private BigDecimal similarity;
+  private String context;
 
   public static CheckIfSanctionedResponseResource ok(SanctionedPersonSimilarity sanctionedPersonSimilarity) {
     return CheckIfSanctionedResponseResource.builder()
@@ -23,6 +24,7 @@ public class CheckIfSanctionedResponseResource {
       .isSanctioned(sanctionedPersonSimilarity.isSanctioned())
       .fullName(sanctionedPersonSimilarity.fullName())
       .similarity(sanctionedPersonSimilarity.similarity())
+      .context(sanctionedPersonSimilarity.context())
       .build();
   }
 }

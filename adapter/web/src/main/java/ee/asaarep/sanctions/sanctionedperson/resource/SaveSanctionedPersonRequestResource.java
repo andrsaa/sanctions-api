@@ -9,8 +9,8 @@ import jakarta.validation.constraints.Size;
 
 import java.util.List;
 
-@Schema(name = "SaveSanctionedPerson")
-public record SaveSanctionedPersonResource(
+@Schema(name = "SaveSanctionedPersonRequest")
+public record SaveSanctionedPersonRequestResource(
   @Size(min = 1, max = 1000) List<@Valid SanctionedPersonResource> sanctionedPersons) {
 
   public SaveSanctionedPersons.Request toRequest() {
@@ -25,7 +25,7 @@ public record SaveSanctionedPersonResource(
       .toList();
   }
 
-  @Schema(name = "SanctionedPerson")
+  @Schema(name = "SanctionedPersonToSave")
   private record SanctionedPersonResource(@Nonnull @Size(max = 255) String fullName) {
   }
 

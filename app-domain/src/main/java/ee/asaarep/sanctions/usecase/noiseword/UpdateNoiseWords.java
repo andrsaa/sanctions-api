@@ -7,42 +7,31 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Set;
 
 import static lombok.AccessLevel.PRIVATE;
 
 @Component
 @RequiredArgsConstructor
-public class SaveNoiseWords {
+public class UpdateNoiseWords {
   private final SaveNoiseWordsPort saveNoiseWordsPort;
 
+  @Transactional
   public void execute(Request request) {
-    saveNoiseWordsPort.save(request);
+    saveNoiseWordsPort.update(request);
   }
 
   @Getter
-  @Builder(access = PRIVATE)
   @Accessors(fluent = true)
+  @Builder(access = PRIVATE)
   public static class Request {
     private List<NoiseWord> noiseWords;
 
-    public static Request of(Set<String> noiseWords) {
+    public static Request of(List<NoiseWord> noiseWords) {
       return Request.builder()
-        .noiseWords(toNoiseWords(noiseWords))
-        .build();
-    }
-
-    private static List<NoiseWord> toNoiseWords(Set<String> noiseWords) {
-      return noiseWords.stream()
-        .map(Request::toNoiseWord)
-        .toList();
-    }
-
-    private static NoiseWord toNoiseWord(String noiseWord) {
-      return NoiseWord.builder()
-        .value(noiseWord)
+        .noiseWords(noiseWords)
         .build();
     }
   }

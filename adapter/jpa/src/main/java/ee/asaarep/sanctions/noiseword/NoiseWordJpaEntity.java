@@ -42,6 +42,12 @@ public class NoiseWordJpaEntity extends Auditable {
       .toList();
   }
 
+  public NoiseWordJpaEntity update(NoiseWord noiseWord) {
+    return this.toBuilder()
+      .value(noiseWord.value())
+      .build();
+  }
+
   private static NoiseWordJpaEntity toEntity(NoiseWord noiseWord) {
     return NoiseWordJpaEntity.builder()
       .value(noiseWord.value())

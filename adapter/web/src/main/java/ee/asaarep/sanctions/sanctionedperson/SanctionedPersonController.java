@@ -32,7 +32,7 @@ public class SanctionedPersonController {
   private final SaveSanctionedPersons saveSanctionedPersons;
   private final UpdateSanctionedPersons updateSanctionedPersons;
   private final DeleteSanctionedPersons deleteSanctionedPersons;
-  private final CheckIfPersonIsSanctioned checkIfPersonIsSanctioned;
+  private final CheckIfSanctioned checkIfSanctioned;
   private final UploadSanctionedPersons uploadSanctionedPersons;
   private final SanctionedPersonPresenter sanctionedPersonPresenter;
 
@@ -54,19 +54,22 @@ public class SanctionedPersonController {
   })
   @PostMapping("/check")
   ResponseEntity<Object> checkSanctionedPerson(@Valid @RequestBody CheckIfSanctionedRequestResource resource) {
-    return sanctionedPersonPresenter.present(checkIfPersonIsSanctioned.execute(resource.toRequest()));
+    return sanctionedPersonPresenter.present(checkIfSanctioned.execute(resource.toRequest()));
   }
 
-  @Operation(summary = "Add sanctioned persons")
+  @Operation(summary = "Add sanctioned persons", responses = {
+    @ApiResponse(responseCode = "200", description = "Successful Operation",
+      content = @Content(mediaType = "application/json",
+        schema = @Schema(implementation = SaveSanctionedPersonResponseResource.class)))
+  })
   @PostMapping("/add")
-  ResponseEntity<Void> addSanctionedPersons(@Valid @RequestBody SaveSanctionedPersonResource resource) {
-    saveSanctionedPersons.execute(resource.toRequest());
-    return ResponseEntity.ok().build();
+  ResponseEntity<Object> addSanctionedPersons(@Valid @RequestBody SaveSanctionedPersonRequestResource resource) {
+    return sanctionedPersonPresenter.present(saveSanctionedPersons.execute(resource.toRequest()));
   }
 
   @Operation(summary = "Update sanctioned persons")
   @PutMapping("/update")
-  ResponseEntity<Void> updateSanctionedPersons(@Valid @RequestBody UpdateSanctionedPersonResource resource) {
+  ResponseEntity<Void> updateSanctionedPersons(@Valid @RequestBody UpdateSanctionedPersonRequestResource resource) {
     updateSanctionedPersons.execute(resource.toRequest());
     return ResponseEntity.ok().build();
   }

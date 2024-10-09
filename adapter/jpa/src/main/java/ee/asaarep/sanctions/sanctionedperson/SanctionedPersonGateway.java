@@ -11,6 +11,7 @@ import ee.asaarep.sanctions.util.PagedResultUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 import static ee.asaarep.sanctions.util.SearchUtil.toPageRequest;
@@ -20,7 +21,6 @@ import static ee.asaarep.sanctions.util.SearchUtil.toPageRequest;
 public class SanctionedPersonGateway implements FindSanctionedPersonPort, SaveSanctionedPersonPort, DeleteSanctionedPersonPort {
   private final SanctionedPersonRepository sanctionedPersonRepository;
   private final SanctionedPersonSpecification sanctionedPersonSpecification = new SanctionedPersonSpecification();
-  private final SanctionedPersonSimilarityRepository sanctionedPersonSimilarityRepository;
 
   @Override
   public PagedResult<SanctionedPerson> findSanctionedPersons(FindSanctionedPersons.Request request) {
@@ -30,15 +30,17 @@ public class SanctionedPersonGateway implements FindSanctionedPersonPort, SaveSa
   }
 
   @Override
-  public SanctionedPersonSimilarity checkIfPersonIsSanctioned(CheckIfPersonIsSanctioned.Request request) {
-    return sanctionedPersonSimilarityRepository.checkIfPersonIsSanctioned(request.fullName, request.similarityThreshold)
-      .map(SanctionedPersonSimilarityEntity::toDomainEntity)
+  public SanctionedPersonSimilarity checkIfPersonIsSanctioned(CheckIfSanctioned.Request request) {
+    return sanctionedPersonRepository.checkIfPersonIsSanctioned(request.fullName, request.similarityThreshold)
+      .map(SanctionedPersonSimilarityProjection::toDomainEntity)
       .orElse(SanctionedPersonSimilarity.notSanctioned());
   }
 
   @Override
-  public void save(SaveSanctionedPersons.Request request) {
-    sanctionedPersonRepository.saveAll(SanctionedPersonJpaEntity.fromDomainEntities(request.sanctionedPersons()));
+  public List<SanctionedPerson> save(SaveSanctionedPersons.Request request) {
+    return sanctionedPersonRepository.saveAll(SanctionedPersonJpaEntity.fromDomainEntities(request.sanctionedPersons())).stream()
+      .map(SanctionedPersonJpaEntity::toDomainEntity)
+      .toList();
   }
 
   @Override
@@ -56,6 +58,6 @@ public class SanctionedPersonGateway implements FindSanctionedPersonPort, SaveSa
 
   @Override
   public void delete(DeleteSanctionedPersons.Request request) {
-    sanctionedPersonRepository.deleteAllById(request.getSanctionedPersonsToDelete());
+    sanctionedPersonRepository.deleteAllById(request.sanctionedPersonsToDelete());
   }
 }

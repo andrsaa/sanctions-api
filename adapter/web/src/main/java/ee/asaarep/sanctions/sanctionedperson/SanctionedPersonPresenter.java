@@ -2,7 +2,9 @@ package ee.asaarep.sanctions.sanctionedperson;
 
 import ee.asaarep.sanctions.sanctionedperson.resource.CheckIfSanctionedResponseResource;
 import ee.asaarep.sanctions.sanctionedperson.resource.ErrorResponseResource;
-import ee.asaarep.sanctions.usecase.sanctionedperson.CheckIfPersonIsSanctioned;
+import ee.asaarep.sanctions.sanctionedperson.resource.SaveSanctionedPersonResponseResource;
+import ee.asaarep.sanctions.usecase.sanctionedperson.CheckIfSanctioned;
+import ee.asaarep.sanctions.usecase.sanctionedperson.SaveSanctionedPersons;
 import ee.asaarep.sanctions.usecase.sanctionedperson.UploadSanctionedPersons;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +18,7 @@ import static org.springframework.util.CollectionUtils.isEmpty;
 @Component
 public class SanctionedPersonPresenter {
 
-  public ResponseEntity<Object> present(CheckIfPersonIsSanctioned.Response response) {
+  public ResponseEntity<Object> present(CheckIfSanctioned.Response response) {
     return isEmpty(response.errors())
       ? ResponseEntity.ok().body(CheckIfSanctionedResponseResource.ok(response.sanctionedPersonSimilarity()))
       : ResponseEntity.status(HttpStatus.CONFLICT).body(ErrorResponseResource.conflict(toErrorStrings(response.errors())));
@@ -26,6 +28,10 @@ public class SanctionedPersonPresenter {
     return isEmpty(response.errors())
       ? ResponseEntity.ok().build()
       : ResponseEntity.status(HttpStatus.CONFLICT).body(ErrorResponseResource.conflict(toErrorStrings(response.errors())));
+  }
+
+  public ResponseEntity<Object> present(SaveSanctionedPersons.Response response) {
+    return ResponseEntity.ok().body(new SaveSanctionedPersonResponseResource(response.sanctionedPersons()));
   }
 
   private <T extends Enum<T>> Set<String> toErrorStrings(Set<T> errors) {

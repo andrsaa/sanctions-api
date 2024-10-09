@@ -2,6 +2,7 @@ package ee.asaarep.sanctions.domain.sanctionedperson;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.With;
 import lombok.experimental.Accessors;
 
 import java.math.BigDecimal;
@@ -15,6 +16,8 @@ public class SanctionedPersonSimilarity {
   private String fullName;
   private BigDecimal similarity;
   private boolean isSanctioned;
+  @With
+  private String context;
 
   public static SanctionedPersonSimilarity notSanctioned() {
     return SanctionedPersonSimilarity.builder()

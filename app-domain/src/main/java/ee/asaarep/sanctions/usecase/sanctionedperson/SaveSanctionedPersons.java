@@ -21,9 +21,9 @@ public class SaveSanctionedPersons {
   private final SaveSanctionedPersonPort saveSanctionedPersonPort;
 
   @Transactional
-  public void execute(Request request) {
+  public Response execute(Request request) {
     log.debug("Saving sanctioned persons");
-    saveSanctionedPersonPort.save(request);
+    return Response.ok(saveSanctionedPersonPort.save(request));
   }
 
   @Getter
@@ -34,6 +34,19 @@ public class SaveSanctionedPersons {
 
     public static Request of(List<SanctionedPerson> sanctionedPersons) {
       return Request.builder()
+        .sanctionedPersons(sanctionedPersons)
+        .build();
+    }
+  }
+
+  @Getter
+  @Accessors(fluent = true)
+  @Builder(access = PRIVATE)
+  public static class Response {
+    private List<SanctionedPerson> sanctionedPersons;
+
+    public static Response ok(List<SanctionedPerson> sanctionedPersons) {
+      return Response.builder()
         .sanctionedPersons(sanctionedPersons)
         .build();
     }

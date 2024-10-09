@@ -1,3 +1,5 @@
+import org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
+
 repositories {
   mavenCentral()
 }
@@ -24,8 +26,12 @@ allprojects {
   }
 
   dependencies {
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    testImplementation(Libs.assertj_core)
+    testImplementation(Libs.mockito_core)
+    testImplementation(Libs.junit_jupiter_api)
+    testImplementation(Libs.junit_platform_runner)
+    testImplementation(Libs.mockito_junit_jupiter)
+    testRuntimeOnly(Libs.junit_jupiter_engine)
   }
 
   java {
@@ -36,6 +42,25 @@ allprojects {
 
   tasks.jar {
     enabled = true
+  }
+
+  tasks.test {
+    useJUnitPlatform()
+    testLogging {
+      showStackTraces = true
+      exceptionFormat = FULL
+    }
+  }
+
+  tasks.register<Test>("testUnit") {
+    useJUnitPlatform {
+      excludeTags("integration-test")
+    }
+    testLogging {
+      showStackTraces = true
+      exceptionFormat = FULL
+    }
+    outputs.upToDateWhen { false }
   }
 }
 

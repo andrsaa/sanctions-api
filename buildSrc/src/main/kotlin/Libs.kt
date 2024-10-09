@@ -60,4 +60,22 @@ object Libs {
   const val commons_csv: String = "org.apache.commons:commons-csv:_"
 
   const val springdoc_openapi_starter_webmvc_ui: String = "org.springdoc:springdoc-openapi-starter-webmvc-ui:_"
+
+  const val assertj_core: String = "org.assertj:assertj-core:_"
+
+  const val mockito_core: String = "org.mockito:mockito-core:_"
+
+  const val junit_jupiter_engine: String = "org.junit.jupiter:junit-jupiter-engine:_"
+
+  const val junit_jupiter_api: String = "org.junit.jupiter:junit-jupiter-api:_"
+
+  const val junit_platform_runner: String = "org.junit.platform:junit-platform-runner:_"
+
+  const val mockito_junit_jupiter: String = "org.mockito:mockito-junit-jupiter:_"
+
+  const val testContainers: String = "org.testcontainers:testcontainers:_"
+
+  const val testContainers_postgresql: String = "org.testcontainers:postgresql:_"
+
+  const val testContainers_junit: String = "org.testcontainers:junit-jupiter:_"
 }

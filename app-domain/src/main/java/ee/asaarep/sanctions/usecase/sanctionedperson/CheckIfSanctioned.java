@@ -25,8 +25,9 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class CheckIfPersonIsSanctioned {
+public class CheckIfSanctioned {
   private static final double DEFAULT_SIMILARITY_THRESHOLD = 0.2;
+  private static final BigDecimal ADD_CONTEXT_SIMILARITY_THRESHOLD = BigDecimal.valueOf(0.4);
   private static final Pattern PUNCTUATION_PATTERN = Pattern.compile("\\p{Punct}");
 
   private final FindSanctionedPersonPort findSanctionedPersonPort;
@@ -37,11 +38,15 @@ public class CheckIfPersonIsSanctioned {
     setSimilarityThreshold(request);
     log.debug("Sanctioned person check with full name: {} and similarity threshold: {}", request.fullName, request.similarityThreshold);
 
+    if (isBlank(request.fullName)) {
+      return Response.error(Set.of(Violation.INPUT_IS_EMPTY));
+    }
     var normalizedFullName = normalize(request.fullName);
     if (normalizedFullName.isEmpty()) {
       return Response.error(Set.of(Violation.INPUT_CONTAINS_ONLY_NOISE_WORDS_OR_PUNCTUATION_MARKS));
     }
-    return Response.ok(findSanctionedPersonPort.checkIfPersonIsSanctioned(request.fullName(normalizedFullName.get())));
+    request.fullName(normalizedFullName.get());
+    return Response.ok(addContext(findSanctionedPersonPort.checkIfPersonIsSanctioned(request), request));
   }
 
   private Optional<String> normalize(String fullName) {
@@ -74,6 +79,14 @@ public class CheckIfPersonIsSanctioned {
     }
     fullName = fullName.replaceAll("\\s{2,}", " ");
     return Optional.of(fullName);
+  }
+
+  private SanctionedPersonSimilarity addContext(SanctionedPersonSimilarity sanctionedPersonSimilarity, Request request) {
+    if (ADD_CONTEXT_SIMILARITY_THRESHOLD.compareTo(request.similarityThreshold) < 0 && !sanctionedPersonSimilarity.isSanctioned()) {
+      return sanctionedPersonSimilarity.withContext("Consider lowering the similarity threshold (" +
+        request.similarityThreshold.toString() +") or opting for a more specific name.");
+    }
+    return sanctionedPersonSimilarity;
   }
 
   @Setter
@@ -113,6 +126,7 @@ public class CheckIfPersonIsSanctioned {
   }
 
   public enum Violation {
+    INPUT_IS_EMPTY,
     INPUT_CONTAINS_ONLY_NOISE_WORDS_OR_PUNCTUATION_MARKS
   }
 }
