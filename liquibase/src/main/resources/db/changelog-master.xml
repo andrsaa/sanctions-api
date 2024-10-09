@@ -8,4 +8,6 @@
   <include file="changelog/01-schema.xml" relativeToChangelogFile="true"/>
   <include file="changelog/05-sanctioned-person.xml" relativeToChangelogFile="true"/>
   <include file="changelog/10-noise-words.xml" relativeToChangelogFile="true"/>
+
+  <include file="test-data/01-sanctioned-persons.xml" relativeToChangelogFile="true" context="test"/>
 </databaseChangeLog>

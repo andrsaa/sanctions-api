@@ -27,7 +27,6 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 @Slf4j
 public class CheckIfSanctioned {
   private static final double DEFAULT_SIMILARITY_THRESHOLD = 0.2;
-  private static final BigDecimal ADD_CONTEXT_SIMILARITY_THRESHOLD = BigDecimal.valueOf(0.4);
   private static final Pattern PUNCTUATION_PATTERN = Pattern.compile("\\p{Punct}");
 
   private final FindSanctionedPersonPort findSanctionedPersonPort;
@@ -36,8 +35,8 @@ public class CheckIfSanctioned {
   @Transactional
   public Response execute(Request request) {
     setSimilarityThreshold(request);
-    log.debug("Sanctioned person check with full name: {} and similarity threshold: {}", request.fullName, request.similarityThreshold);
-
+    log.debug("Sanctioned person check with full name: {} and similarity threshold: {}",
+      request.fullName, request.similarityThreshold);
     if (isBlank(request.fullName)) {
       return Response.error(Set.of(Violation.INPUT_IS_EMPTY));
     }
@@ -45,8 +44,8 @@ public class CheckIfSanctioned {
     if (normalizedFullName.isEmpty()) {
       return Response.error(Set.of(Violation.INPUT_CONTAINS_ONLY_NOISE_WORDS_OR_PUNCTUATION_MARKS));
     }
-    request.fullName(normalizedFullName.get());
-    return Response.ok(addContext(findSanctionedPersonPort.checkIfPersonIsSanctioned(request), request));
+    return Response.ok(addContext(findSanctionedPersonPort
+      .checkIfPersonIsSanctioned(request.fullName(normalizedFullName.get())), request));
   }
 
   private Optional<String> normalize(String fullName) {
@@ -72,7 +71,6 @@ public class CheckIfSanctioned {
     var noiseWords = findNoiseWordsPort.findAll();
     for (NoiseWord noiseWord : noiseWords) {
       fullName = fullName.replaceAll("\\b" + noiseWord.value() + "\\b", "").trim();
-
       if (isBlank(fullName)) {
         return Optional.empty();
       }
@@ -82,9 +80,9 @@ public class CheckIfSanctioned {
   }
 
   private SanctionedPersonSimilarity addContext(SanctionedPersonSimilarity sanctionedPersonSimilarity, Request request) {
-    if (ADD_CONTEXT_SIMILARITY_THRESHOLD.compareTo(request.similarityThreshold) < 0 && !sanctionedPersonSimilarity.isSanctioned()) {
+    if (BigDecimal.valueOf(DEFAULT_SIMILARITY_THRESHOLD).compareTo(request.similarityThreshold) <= 0 && !sanctionedPersonSimilarity.isSanctioned()) {
       return sanctionedPersonSimilarity.withContext("Consider lowering the similarity threshold (" +
-        request.similarityThreshold.toString() +") or opting for a more specific name.");
+        request.similarityThreshold.toString() +").");
     }
     return sanctionedPersonSimilarity;
   }

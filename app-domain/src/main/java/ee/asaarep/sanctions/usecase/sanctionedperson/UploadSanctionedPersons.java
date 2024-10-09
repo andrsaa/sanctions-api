@@ -42,18 +42,9 @@ public class UploadSanctionedPersons {
         log.error("Required header: '{}' is missing", WHOLE_NAME_HEADER);
         return Response.error(Set.of(Violation.WHOLE_NAME_HEADER_MISSING));
       }
-      List<SanctionedPerson> sanctionedPersons = new ArrayList<>();
-      for (CSVRecord record : csvParser) {
-        if (isBlank(record.get(WHOLE_NAME_HEADER))) {
-          continue;
-        }
-        SanctionedPerson sanctionedPerson = SanctionedPerson.builder().fullName(record.get(WHOLE_NAME_HEADER)).build();
-        sanctionedPersons.add(sanctionedPerson);
-      }
-      log.debug("Saving sanctioned persons");
-      saveSanctionedPersonPort.save(SaveSanctionedPersons.Request.of(sanctionedPersons));
+      saveSanctionedPersonPort.save(SaveSanctionedPersons.Request.of(parseSanctionedPersons(csvParser)));
       return Response.ok();
-    } catch (IOException e) {
+    } catch (IOException | IllegalArgumentException e) {
       log.error("Error reading CSV file", e);
       return Response.error(Set.of(Violation.READING_FILE_FAILED));
     }
@@ -65,6 +56,19 @@ public class UploadSanctionedPersons {
       .setHeader()
       .setSkipHeaderRecord(true)
       .build();
+  }
+
+  private List<SanctionedPerson> parseSanctionedPersons(CSVParser csvParser) {
+    List<SanctionedPerson> sanctionedPersons = new ArrayList<>();
+    for (CSVRecord record : csvParser) {
+      if (isBlank(record.get(WHOLE_NAME_HEADER))) {
+        continue;
+      }
+      sanctionedPersons.add(SanctionedPerson.builder()
+        .fullName(record.get(WHOLE_NAME_HEADER))
+        .build());
+    }
+    return sanctionedPersons;
   }
 
   @Getter

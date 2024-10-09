@@ -16,9 +16,15 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.lenient;
+import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.times;
 
 @ExtendWith(MockitoExtension.class)
 public class CheckIfSanctionedTest {
@@ -39,7 +45,7 @@ public class CheckIfSanctionedTest {
   }
 
   @Test
-  void execute_withEmptyFullName() {
+  void execute_withEmptyName_shouldReturnInputIsEmptyViolation() {
     CheckIfSanctioned.Request request = CheckIfSanctioned.Request.of("", null);
     CheckIfSanctioned.Response response = checkIfSanctioned.execute(request);
 
@@ -47,7 +53,7 @@ public class CheckIfSanctionedTest {
   }
 
   @Test
-  void execute_withNoiseWordsOnly() {
+  void execute_withNoiseWordsOnly_shouldReturnOnlyNoiseWordsOrPunctuationMarksViolation() {
     CheckIfSanctioned.Request request = CheckIfSanctioned.Request.of("the and", null);
     CheckIfSanctioned.Response response = checkIfSanctioned.execute(request);
 
@@ -55,7 +61,7 @@ public class CheckIfSanctionedTest {
   }
 
   @Test
-  void execute_withPunctuationMarks() {
+  void execute_withPunctuationMarks_shouldRemovePunctuationMarks() {
     CheckIfSanctioned.Request request = CheckIfSanctioned.Request.of(", Osama.! Bin", null);
     when(findSanctionedPersonPort.checkIfPersonIsSanctioned(any()))
       .thenReturn(SanctionedPersonSimilarity.builder().isSanctioned(true).build());
@@ -70,7 +76,7 @@ public class CheckIfSanctionedTest {
   }
 
   @Test
-  void execute_withValidFullNameAndSanctionedPersonFound() {
+  void execute_withValidFullNameAndSanctionedPersonFound_shouldNotContainErrorsNorSetContext() {
     when(findSanctionedPersonPort.checkIfPersonIsSanctioned(any()))
       .thenReturn(SanctionedPersonSimilarity.builder()
         .isSanctioned(true)
@@ -87,7 +93,7 @@ public class CheckIfSanctionedTest {
   }
 
   @Test
-  void execute_withValidFullNameAndNoSanctionedPersonFound() {
+  void execute_withValidFullNameAndSanctionedPersonNotFound_shouldSetContext() {
     when(findSanctionedPersonPort.checkIfPersonIsSanctioned(any()))
       .thenReturn(SanctionedPersonSimilarity.builder()
         .isSanctioned(false)
@@ -97,7 +103,7 @@ public class CheckIfSanctionedTest {
     CheckIfSanctioned.Response response = checkIfSanctioned.execute(request);
 
     assertFalse(response.sanctionedPersonSimilarity().isSanctioned());
-    assertEquals("Consider lowering the similarity threshold (0.5) or opting for a more specific name.",
+    assertEquals("Consider lowering the similarity threshold (0.5).",
       response.sanctionedPersonSimilarity().context());
   }
 }
