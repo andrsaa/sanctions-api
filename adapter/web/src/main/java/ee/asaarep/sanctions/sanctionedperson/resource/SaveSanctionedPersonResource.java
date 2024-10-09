@@ -2,13 +2,16 @@ package ee.asaarep.sanctions.sanctionedperson.resource;
 
 import ee.asaarep.sanctions.domain.sanctionedperson.SanctionedPerson;
 import ee.asaarep.sanctions.usecase.sanctionedperson.SaveSanctionedPersons;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.annotation.Nonnull;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Size;
 
 import java.util.List;
 
-public record SanctionedPersonSaveResource(
-  @Size(min = 1, max = 1000) List<SanctionedPersonResource> sanctionedPersons) {
+@Schema(name = "SaveSanctionedPerson")
+public record SaveSanctionedPersonResource(
+  @Size(min = 1, max = 1000) List<@Valid SanctionedPersonResource> sanctionedPersons) {
 
   public SaveSanctionedPersons.Request toRequest() {
     return SaveSanctionedPersons.Request.of(toDomainEntities());
@@ -22,6 +25,7 @@ public record SanctionedPersonSaveResource(
       .toList();
   }
 
+  @Schema(name = "SanctionedPerson")
   private record SanctionedPersonResource(@Nonnull @Size(max = 255) String fullName) {
   }
 

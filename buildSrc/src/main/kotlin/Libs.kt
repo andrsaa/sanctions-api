@@ -58,4 +58,6 @@ object Libs {
   const val commons_lang3: String = "org.apache.commons:commons-lang3:_"
 
   const val commons_csv: String = "org.apache.commons:commons-csv:_"
+
+  const val springdoc_openapi_starter_webmvc_ui: String = "org.springdoc:springdoc-openapi-starter-webmvc-ui:_"
 }

@@ -5,6 +5,7 @@ import ee.asaarep.sanctions.usecase.sanctionedperson.port.SaveSanctionedPersonPo
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
@@ -18,6 +19,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import static lombok.AccessLevel.PRIVATE;
 import static org.apache.commons.lang3.StringUtils.isBlank;
@@ -32,10 +34,14 @@ public class UploadSanctionedPersons {
   private final SaveSanctionedPersonPort saveSanctionedPersonPort;
 
   @Transactional
-  public void execute(Request request) {
+  public Response execute(Request request) {
     log.debug("Reading sanctioned persons");
     try (BufferedReader reader = new BufferedReader(new InputStreamReader(request.inputStream));
          CSVParser csvParser = new CSVParser(reader, getCSVFormat())) {
+      if (!csvParser.getHeaderMap().containsKey(WHOLE_NAME_HEADER)) {
+        log.error("Required header: '{}' is missing", WHOLE_NAME_HEADER);
+        return Response.error(Set.of(Violation.WHOLE_NAME_HEADER_MISSING));
+      }
       List<SanctionedPerson> sanctionedPersons = new ArrayList<>();
       for (CSVRecord record : csvParser) {
         if (isBlank(record.get(WHOLE_NAME_HEADER))) {
@@ -46,8 +52,10 @@ public class UploadSanctionedPersons {
       }
       log.debug("Saving sanctioned persons");
       saveSanctionedPersonPort.save(SaveSanctionedPersons.Request.of(sanctionedPersons));
+      return Response.ok();
     } catch (IOException e) {
       log.error("Error reading CSV file", e);
+      return Response.error(Set.of(Violation.READING_FILE_FAILED));
     }
   }
 
@@ -69,5 +77,27 @@ public class UploadSanctionedPersons {
         .inputStream(inputStream)
         .build();
     }
+  }
+
+  @Getter
+  @Builder(access = PRIVATE)
+  @Accessors(fluent = true)
+  public static class Response {
+    private Set<Violation> errors;
+
+    public static Response ok() {
+      return builder().build();
+    }
+
+    public static Response error(Set<Violation> violations) {
+      return builder()
+        .errors(violations)
+        .build();
+    }
+  }
+
+  public enum Violation {
+    WHOLE_NAME_HEADER_MISSING,
+    READING_FILE_FAILED
   }
 }

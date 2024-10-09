@@ -39,4 +39,8 @@
         (sanctions.uuid_generate_v4(), 'and', now(), now())
     </sql>
   </changeSet>
+
+  <changeSet id="alter_column_value_add_unique_constraint_09102024" author="andreas.saarep">
+    <addUniqueConstraint tableName="noise_word" columnNames="value" schemaName="sanctions"/>
+  </changeSet>
 </databaseChangeLog>

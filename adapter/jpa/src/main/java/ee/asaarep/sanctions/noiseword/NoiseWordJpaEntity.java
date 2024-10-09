@@ -1,5 +1,6 @@
 package ee.asaarep.sanctions.noiseword;
 
+import ee.asaarep.sanctions.Auditable;
 import ee.asaarep.sanctions.domain.noiseword.NoiseWord;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -18,7 +19,7 @@ import java.util.UUID;
 @Accessors(fluent = true)
 @SuperBuilder(toBuilder = true)
 @Table(name = "noise_word", schema = "sanctions")
-public class NoiseWordJpaEntity {
+public class NoiseWordJpaEntity extends Auditable {
 
   @Id
   @GeneratedValue

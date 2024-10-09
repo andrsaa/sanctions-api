@@ -4,6 +4,7 @@ services:
     environment:
       - 'POSTGRES_USER=postgres'
       - 'POSTGRES_PASSWORD=postgres'
+      - 'TZ=Europe/Tallinn'
     ports:
       - '7900:5432'
   app:

@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 import java.util.Optional;
 
 public interface SanctionedPersonSimilarityRepository extends JpaRepository<SanctionedPersonSimilarityEntity, String> {
+
   @Query(value = "SELECT sub.id, sub.full_name, sub.similarity " +
     "FROM (SELECT sp.id AS id, sp.full_name AS full_name, sanctions.similarity(:fullName, sp.full_name) AS similarity " +
     "      FROM sanctions.sanctioned_person sp " +

@@ -41,7 +41,7 @@ public class CheckIfPersonIsSanctioned {
     if (normalizedFullName.isEmpty()) {
       return Response.error(Set.of(Violation.INPUT_CONTAINS_ONLY_NOISE_WORDS_OR_PUNCTUATION_MARKS));
     }
-    return Response.ok(findSanctionedPersonPort.checkIfPersonIsSanctioned(request));
+    return Response.ok(findSanctionedPersonPort.checkIfPersonIsSanctioned(request.fullName(normalizedFullName.get())));
   }
 
   private Optional<String> normalize(String fullName) {
@@ -92,7 +92,6 @@ public class CheckIfPersonIsSanctioned {
     }
   }
 
-  @Setter
   @Getter
   @Builder(access = PRIVATE)
   @Accessors(fluent = true)
