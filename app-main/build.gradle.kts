@@ -9,6 +9,6 @@ dependencies {
 tasks.jar {
     archiveFileName.set("sanctions-main.jar")
 //    manifest {
-//        attributes("Main-Class" to "ee.asaarep.sanctions.SanctionsApiApplication")
+//        attributes("Main-Class" to "ee.andrsaa.sanctions.SanctionsApiApplication")
 //    }
 }

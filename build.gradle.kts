@@ -12,8 +12,8 @@ plugins {
   id("io.freefair.lombok")
 }
 
-group = "ee.asaarep"
-version = "0.0.2-SNAPSHOT"
+group = "ee.andrsaa"
+version = "1.0"
 
 allprojects {
   apply(plugin = "java-library")
@@ -71,7 +71,7 @@ subprojects {
 }
 
 springBoot {
-  mainClass.set("ee.asaarep.sanctions.SanctionsApiApplication")
+  mainClass.set("ee.andrsaa.sanctions.SanctionsApiApplication")
 }
 
 dependencies {
