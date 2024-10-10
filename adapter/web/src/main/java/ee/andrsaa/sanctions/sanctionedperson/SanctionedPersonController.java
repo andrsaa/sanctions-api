@@ -42,7 +42,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 @Slf4j
 @RequestMapping("/sanctioned-person")
-@Tag(name = "SanctionedPersonController", description = "Manage sanctioned persons")
+@Tag(name = "SanctionedPersonController", description = "Manage sanctioned persons used to check for name matches.")
 public class SanctionedPersonController {
   private static final String TEXT_CSV_TYPE = "text/csv";
 
@@ -101,7 +101,7 @@ public class SanctionedPersonController {
 
   @Operation(summary = "Upload sanctioned persons from CSV file", description = "Based on [Consolidated Financial Sanctions File 1.1]" +
     "(https://data.europa.eu/data/datasets/consolidated-list-of-persons-groups-and-entities-subject-to-eu-financial-sanctions). " +
-    "Requires header: 'NameAlias_WholeName'", responses = {
+    "Requires header 'NameAlias_WholeName'", responses = {
     @ApiResponse(responseCode = "200", description = "Successful Operation"),
     @ApiResponse(responseCode = "400", description = "Bad request"),
     @ApiResponse(responseCode = "409", description = "Validation error",

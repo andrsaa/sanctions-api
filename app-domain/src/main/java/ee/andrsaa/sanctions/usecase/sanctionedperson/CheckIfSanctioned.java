@@ -26,7 +26,7 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 @RequiredArgsConstructor
 @Slf4j
 public class CheckIfSanctioned {
-  private static final double DEFAULT_SIMILARITY_THRESHOLD = 0.2;
+  private static final BigDecimal DEFAULT_SIMILARITY_THRESHOLD = BigDecimal.valueOf(0.2);
   private static final Pattern PUNCTUATION_PATTERN = Pattern.compile("\\p{Punct}");
 
   private final FindSanctionedPersonPort findSanctionedPersonPort;
@@ -55,7 +55,7 @@ public class CheckIfSanctioned {
 
   private void setSimilarityThreshold(Request request) {
     if (isNull(request.similarityThreshold())) {
-      request.similarityThreshold(BigDecimal.valueOf(DEFAULT_SIMILARITY_THRESHOLD));
+      request.similarityThreshold(DEFAULT_SIMILARITY_THRESHOLD);
     }
   }
 
@@ -80,9 +80,9 @@ public class CheckIfSanctioned {
   }
 
   private SanctionedPersonSimilarity addContext(SanctionedPersonSimilarity sanctionedPersonSimilarity, Request request) {
-    if (BigDecimal.valueOf(DEFAULT_SIMILARITY_THRESHOLD).compareTo(request.similarityThreshold) <= 0 && !sanctionedPersonSimilarity.isSanctioned()) {
+    if (request.similarityThreshold.compareTo(DEFAULT_SIMILARITY_THRESHOLD) >= 0 && !sanctionedPersonSimilarity.isSanctioned()) {
       return sanctionedPersonSimilarity.withContext("Consider lowering the similarity threshold (" +
-        request.similarityThreshold.toString() +").");
+        request.similarityThreshold +").");
     }
     return sanctionedPersonSimilarity;
   }

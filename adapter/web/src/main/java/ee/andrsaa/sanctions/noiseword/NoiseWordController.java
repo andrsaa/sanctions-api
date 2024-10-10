@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @Slf4j
 @RequestMapping("/noise-word")
-@Tag(name = "NoiseWordController", description = "Manage noise words")
+@Tag(name = "NoiseWordController", description = "Manage noise words used to normalize input for name matching.")
 public class NoiseWordController {
   private final FindNoiseWords findNoiseWords;
   private final SaveNoiseWords saveNoiseWords;
