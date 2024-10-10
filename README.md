@@ -50,7 +50,7 @@ Authorization: Basic dXNlcjpwYXNzd29yZA==
 ```
 
 ### Integration tests
-Uses testcontainers to run a PostgreSQL container in Docker and execute tests against it.
+Uses [testcontainers](https://testcontainers.com/) to run a PostgreSQL container in Docker and executes tests against it.
 ```bash
 ./gradlew testIntegration
 ```
